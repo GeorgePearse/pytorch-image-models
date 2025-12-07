@@ -1,0 +1,2221 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for PyTorch Image Models (timm) - A collection of image models, layers, utilities, and training scripts">
+      
+      
+        <meta name="author" content="Ross Wightman">
+      
+      
+        <link rel="canonical" href="https://georgepearse.github.io/pytorch-image-models/architectures/">
+      
+      
+        <link rel="prev" href="../metrics/historical/">
+      
+      
+        <link rel="next" href="../features/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Model Architectures - PyTorch Image Models (timm)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#model-architectures" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PyTorch Image Models (timm)" class="md-header__button md-logo" aria-label="PyTorch Image Models (timm)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PyTorch Image Models (timm)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Model Architectures
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/GeorgePearse/pytorch-image-models" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GeorgePearse/pytorch-image-models
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../metrics/overview/" class="md-tabs__link">
+          
+  
+  
+  Model Metrics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Model Architectures
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../features/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Features
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../training/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Training Scripts
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PyTorch Image Models (timm)" class="md-nav__button md-logo" aria-label="PyTorch Image Models (timm)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PyTorch Image Models (timm)
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/GeorgePearse/pytorch-image-models" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GeorgePearse/pytorch-image-models
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Metrics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Model Metrics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/all-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔥 Complete Benchmark Table
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/2025-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2025 Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/2024-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2024 Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/historical/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Historical Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Architectures
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Architectures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vision-transformers-vit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vision Transformers (ViT)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Vision Transformers (ViT)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-vit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard ViT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vit-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ViT Variants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clip-vision-encoders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLIP Vision Encoders
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchical-transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchical Transformers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hierarchical Transformers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swin-transformer-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Swin Transformer Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-hierarchical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Hierarchical
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hybrid-conv-transformer-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid Conv-Transformer Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hybrid Conv-Transformer Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major-hybrids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major Hybrids
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modern-convnets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modern ConvNets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modern ConvNets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#convnext-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConvNeXt Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recent-convnets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recent ConvNets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mobile-efficient-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mobile &amp; Efficient Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mobile &amp; Efficient Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mobilenet-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MobileNet Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#efficientnet-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EfficientNet Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-mobile-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Mobile Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resnet-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResNet &amp; Variants
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ResNet &amp; Variants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-resnet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard ResNet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resnet-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResNet Improvements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-trained-resnet-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-trained ResNet Variants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attention-meta-former-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attention &amp; Meta-Former Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attention &amp; Meta-Former Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pure-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pure Attention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#meta-formers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meta-Formers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mlp-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MLP-Based
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specialized-architectures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specialized Architectures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specialized Architectures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-scale-pyramids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Scale &amp; Pyramids
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eva-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EVA Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#davit-hiera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DaViT &amp; Hiera
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classic-legacy-architectures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classic &amp; Legacy Architectures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classic &amp; Legacy Architectures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dense-efficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dense &amp; Efficient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inception-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inception Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection-backbones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detection Backbones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specialized
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nas-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NAS Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalizer-free" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Normalizer-Free
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-notable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Notable
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Categories
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture Categories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#by-paradigm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        By Paradigm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#by-use-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        By Use Case
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#by-training-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        By Training Type
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-selection-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Selection Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Links
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../training/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Training Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vision-transformers-vit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vision Transformers (ViT)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Vision Transformers (ViT)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-vit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard ViT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vit-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ViT Variants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clip-vision-encoders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLIP Vision Encoders
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchical-transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchical Transformers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hierarchical Transformers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swin-transformer-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Swin Transformer Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-hierarchical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Hierarchical
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hybrid-conv-transformer-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid Conv-Transformer Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hybrid Conv-Transformer Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major-hybrids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major Hybrids
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modern-convnets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modern ConvNets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modern ConvNets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#convnext-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConvNeXt Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recent-convnets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recent ConvNets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mobile-efficient-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mobile &amp; Efficient Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mobile &amp; Efficient Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mobilenet-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MobileNet Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#efficientnet-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EfficientNet Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-mobile-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Mobile Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resnet-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResNet &amp; Variants
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ResNet &amp; Variants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-resnet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard ResNet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resnet-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResNet Improvements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-trained-resnet-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-trained ResNet Variants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attention-meta-former-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attention &amp; Meta-Former Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attention &amp; Meta-Former Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pure-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pure Attention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#meta-formers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meta-Formers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mlp-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MLP-Based
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specialized-architectures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specialized Architectures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specialized Architectures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-scale-pyramids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Scale &amp; Pyramids
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eva-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EVA Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#davit-hiera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DaViT &amp; Hiera
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classic-legacy-architectures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classic &amp; Legacy Architectures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classic &amp; Legacy Architectures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dense-efficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dense &amp; Efficient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inception-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inception Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection-backbones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detection Backbones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialized" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specialized
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nas-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NAS Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalizer-free" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Normalizer-Free
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-notable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Notable
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Categories
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture Categories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#by-paradigm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        By Paradigm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#by-use-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        By Use Case
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#by-training-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        By Training Type
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-selection-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Selection Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Links
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="model-architectures">Model Architectures<a class="headerlink" href="#model-architectures" title="Permanent link">&para;</a></h1>
+<p>This page provides an overview of all model architectures available in <code>timm</code>.</p>
+<h2 id="vision-transformers-vit">Vision Transformers (ViT)<a class="headerlink" href="#vision-transformers-vit" title="Permanent link">&para;</a></h2>
+<p>Transformer-based architectures for computer vision.</p>
+<h3 id="standard-vit">Standard ViT<a class="headerlink" href="#standard-vit" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Vision Transformer</strong> - https://arxiv.org/abs/2010.11929</li>
+<li>Pure transformer architecture with patch embeddings</li>
+<li>Available in Tiny, Small, Base, Large, Huge sizes</li>
+</ul>
+<h3 id="vit-variants">ViT Variants<a class="headerlink" href="#vit-variants" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>DeiT</strong> - Data-efficient Image Transformers - https://arxiv.org/abs/2012.12877</li>
+<li><strong>DeiT-III</strong> - https://arxiv.org/pdf/2204.07118.pdf</li>
+<li><strong>BEiT</strong> - BERT Pre-Training for Image Transformers - https://arxiv.org/abs/2106.08254</li>
+<li><strong>BEiT-V2</strong> - https://arxiv.org/abs/2208.06366</li>
+<li><strong>BEiT3</strong> - https://arxiv.org/abs/2208.10442</li>
+<li><strong>CaiT</strong> - Class-Attention in Image Transformers - https://arxiv.org/abs/2103.17239</li>
+<li><strong>FlexiViT</strong> - https://arxiv.org/abs/2212.08013</li>
+<li><strong>ROPE-ViT</strong> - https://arxiv.org/abs/2403.13298</li>
+<li><strong>NaFlexViT</strong> - Native aspect ratio, variable resolution support</li>
+<li><strong>PE (Perception Encoder)</strong> - https://arxiv.org/abs/2504.13181</li>
+</ul>
+<h3 id="clip-vision-encoders">CLIP Vision Encoders<a class="headerlink" href="#clip-vision-encoders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>SigLIP</strong> (image encoder) - https://arxiv.org/abs/2303.15343</li>
+<li><strong>SigLIP 2</strong> (image encoder) - https://arxiv.org/abs/2502.14786</li>
+<li><strong>MobileCLIP</strong> - https://arxiv.org/abs/2311.17049</li>
+<li><strong>ViTamin</strong> - https://arxiv.org/abs/2404.02132</li>
+<li><strong>TinyCLIP</strong> - Compact CLIP vision towers</li>
+</ul>
+<h2 id="hierarchical-transformers">Hierarchical Transformers<a class="headerlink" href="#hierarchical-transformers" title="Permanent link">&para;</a></h2>
+<p>Transformer architectures with hierarchical feature maps.</p>
+<h3 id="swin-transformer-family">Swin Transformer Family<a class="headerlink" href="#swin-transformer-family" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Swin Transformer</strong> - https://arxiv.org/abs/2103.14030</li>
+<li><strong>Swin Transformer V2</strong> - https://arxiv.org/abs/2111.09883</li>
+<li><strong>Swin S3 (AutoFormerV2)</strong> - https://arxiv.org/abs/2111.14725</li>
+</ul>
+<h3 id="other-hierarchical">Other Hierarchical<a class="headerlink" href="#other-hierarchical" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Twins</strong> - Spatial Attention in Vision Transformers - https://arxiv.org/pdf/2104.13840.pdf</li>
+<li><strong>Focal Net</strong> - Focal Modulation Networks - https://arxiv.org/abs/2203.11926</li>
+<li><strong>GCViT</strong> - Global Context Vision Transformer - https://arxiv.org/abs/2206.09959</li>
+<li><strong>MaxViT</strong> - Multi-Axis Vision Transformer - https://arxiv.org/abs/2204.01697</li>
+<li><strong>CoaT</strong> - Co-Scale Conv-Attentional Image Transformers - https://arxiv.org/abs/2104.06399</li>
+</ul>
+<h2 id="hybrid-conv-transformer-models">Hybrid Conv-Transformer Models<a class="headerlink" href="#hybrid-conv-transformer-models" title="Permanent link">&para;</a></h2>
+<p>Combining convolutional and transformer components.</p>
+<h3 id="major-hybrids">Major Hybrids<a class="headerlink" href="#major-hybrids" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>CoAtNet</strong> - Convolution and Attention - https://arxiv.org/abs/2106.04803</li>
+<li><strong>ConViT</strong> - Soft Convolutional Inductive Biases - https://arxiv.org/abs/2103.10697</li>
+<li><strong>LeViT</strong> - Vision Transformer in ConvNet's Clothing - https://arxiv.org/abs/2104.01136</li>
+<li><strong>MobileViT</strong> - https://arxiv.org/abs/2110.02178</li>
+<li><strong>MobileViT-V2</strong> - https://arxiv.org/abs/2206.02680</li>
+<li><strong>EfficientViT (MIT)</strong> - https://arxiv.org/abs/2205.14756</li>
+<li><strong>EfficientViT (MSRA)</strong> - https://arxiv.org/abs/2305.07027</li>
+<li><strong>FastViT</strong> - https://arxiv.org/abs/2303.14189</li>
+<li><strong>Next-ViT</strong> - https://arxiv.org/abs/2207.05501</li>
+</ul>
+<h2 id="modern-convnets">Modern ConvNets<a class="headerlink" href="#modern-convnets" title="Permanent link">&para;</a></h2>
+<p>Pure convolutional architectures with modern design principles.</p>
+<h3 id="convnext-family">ConvNeXt Family<a class="headerlink" href="#convnext-family" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>ConvNeXt</strong> - https://arxiv.org/abs/2201.03545</li>
+<li><strong>ConvNeXt-V2</strong> - http://arxiv.org/abs/2301.00808</li>
+<li>Modern ConvNet design inspired by transformers</li>
+</ul>
+<h3 id="recent-convnets">Recent ConvNets<a class="headerlink" href="#recent-convnets" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>MambaOut</strong> - https://arxiv.org/abs/2405.07992</li>
+<li><strong>FasterNet</strong> - https://arxiv.org/abs/2303.03667</li>
+<li><strong>SwiftFormer</strong> - https://arxiv.org/pdf/2303.15446</li>
+<li><strong>StarNet</strong> - https://arxiv.org/abs/2403.19967</li>
+<li><strong>RDNet</strong> - DenseNets Reloaded - https://arxiv.org/abs/2403.19588</li>
+<li><strong>EdgeNeXt</strong> - https://arxiv.org/abs/2206.10589</li>
+<li><strong>InceptionNeXt</strong> - https://arxiv.org/abs/2303.16900</li>
+</ul>
+<h2 id="mobile-efficient-models">Mobile &amp; Efficient Models<a class="headerlink" href="#mobile-efficient-models" title="Permanent link">&para;</a></h2>
+<p>Architectures optimized for mobile and edge deployment.</p>
+<h3 id="mobilenet-family">MobileNet Family<a class="headerlink" href="#mobilenet-family" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>MobileNet-V1</strong> - Depthwise separable convolutions</li>
+<li><strong>MobileNet-V2</strong> - https://arxiv.org/abs/1801.04381</li>
+<li><strong>MobileNet-V3</strong> - https://arxiv.org/abs/1905.02244</li>
+<li><strong>MobileNet-V4</strong> - https://arxiv.org/abs/2404.10518</li>
+<li><strong>MobileNet-V5</strong> - Backbone for Gemma 3n</li>
+</ul>
+<h3 id="efficientnet-family">EfficientNet Family<a class="headerlink" href="#efficientnet-family" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>EfficientNet (B0-B7)</strong> - https://arxiv.org/abs/1905.11946</li>
+<li><strong>EfficientNet-EdgeTPU</strong> - https://ai.googleblog.com/2019/08/efficientnet-edgetpu-creating.html</li>
+<li><strong>EfficientNet V2</strong> - https://arxiv.org/abs/2104.00298</li>
+<li><strong>EfficientNet NoisyStudent</strong> - https://arxiv.org/abs/1911.04252</li>
+<li><strong>EfficientNet AdvProp</strong> - https://arxiv.org/abs/1911.09665</li>
+</ul>
+<h3 id="other-mobile-models">Other Mobile Models<a class="headerlink" href="#other-mobile-models" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>GhostNet</strong> - https://arxiv.org/abs/1911.11907</li>
+<li><strong>GhostNet-V2</strong> - https://arxiv.org/abs/2211.12905</li>
+<li><strong>GhostNet-V3</strong> - https://arxiv.org/abs/2404.11202</li>
+<li><strong>RepGhostNet</strong> - https://arxiv.org/abs/2211.06088</li>
+<li><strong>MobileOne</strong> - https://arxiv.org/abs/2206.04040</li>
+<li><strong>RepViT</strong> - https://arxiv.org/abs/2307.09283</li>
+<li><strong>TinyViT</strong> - https://arxiv.org/abs/2207.10666</li>
+<li><strong>SHViT</strong> - https://arxiv.org/abs/2401.16456</li>
+<li><strong>MNASNet</strong> - https://arxiv.org/abs/1807.11626</li>
+<li><strong>FBNet-C</strong> - https://arxiv.org/abs/1812.03443</li>
+<li><strong>MixNet</strong> - https://arxiv.org/abs/1907.09595</li>
+<li><strong>TinyNet</strong> - https://arxiv.org/abs/2010.14819</li>
+<li><strong>Single-Path NAS</strong> - https://arxiv.org/abs/1904.02877</li>
+<li><strong>HardCoRe-NAS</strong> - https://arxiv.org/abs/2102.11646</li>
+<li><strong>LCNet</strong> - https://arxiv.org/abs/2109.15099</li>
+</ul>
+<h2 id="resnet-variants">ResNet &amp; Variants<a class="headerlink" href="#resnet-variants" title="Permanent link">&para;</a></h2>
+<p>Classic and improved residual network architectures.</p>
+<h3 id="standard-resnet">Standard ResNet<a class="headerlink" href="#standard-resnet" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>ResNet (v1b/v1.5)</strong> - https://arxiv.org/abs/1512.03385</li>
+<li><strong>ResNeXt</strong> - https://arxiv.org/abs/1611.05431</li>
+<li><strong>Big Transfer ResNetV2 (BiT)</strong> - https://arxiv.org/abs/1912.11370</li>
+</ul>
+<h3 id="resnet-improvements">ResNet Improvements<a class="headerlink" href="#resnet-improvements" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>ResNet-D</strong> - Bag of Tricks - https://arxiv.org/abs/1812.01187</li>
+<li><strong>ResNet-RS</strong> - https://arxiv.org/abs/2103.07579</li>
+<li><strong>ECA-ResNet</strong> - https://arxiv.org/abs/1910.03151v4</li>
+<li><strong>SE-ResNet</strong> - Squeeze-and-Excitation - https://arxiv.org/abs/1709.01507</li>
+<li><strong>SK-ResNet</strong> - Selective Kernel - https://arxiv.org/abs/1903.06586</li>
+<li><strong>Res2Net</strong> - https://arxiv.org/abs/1904.01169</li>
+<li><strong>ResNeSt</strong> - https://arxiv.org/abs/2004.08955</li>
+</ul>
+<h3 id="pre-trained-resnet-variants">Pre-trained ResNet Variants<a class="headerlink" href="#pre-trained-resnet-variants" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>WSL</strong> - Weakly-supervised Instagram pretrained - https://arxiv.org/abs/1805.00932</li>
+<li><strong>SSL/SWSL</strong> - Semi-supervised/Semi-weakly supervised - https://arxiv.org/abs/1905.00546</li>
+</ul>
+<h2 id="attention-meta-former-models">Attention &amp; Meta-Former Models<a class="headerlink" href="#attention-meta-former-models" title="Permanent link">&para;</a></h2>
+<p>Models based on attention mechanisms or meta-architectures.</p>
+<h3 id="pure-attention">Pure Attention<a class="headerlink" href="#pure-attention" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Bottleneck Transformers</strong> - https://arxiv.org/abs/2101.11605</li>
+<li><strong>Lambda Networks</strong> - https://arxiv.org/abs/2102.08602</li>
+<li><strong>Halo Nets</strong> - https://arxiv.org/abs/2103.12731</li>
+</ul>
+<h3 id="meta-formers">Meta-Formers<a class="headerlink" href="#meta-formers" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>MetaFormer</strong> - PoolFormer-v2, ConvFormer, CAFormer - https://arxiv.org/abs/2210.13452</li>
+<li><strong>PoolFormer</strong> - https://arxiv.org/abs/2111.11418</li>
+</ul>
+<h3 id="mlp-based">MLP-Based<a class="headerlink" href="#mlp-based" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>MLP-Mixer</strong> - https://arxiv.org/abs/2105.01601</li>
+<li><strong>ResMLP</strong> - https://arxiv.org/abs/2105.03404</li>
+<li><strong>gMLP</strong> - https://arxiv.org/abs/2105.08050</li>
+<li><strong>Sequencer2D</strong> - https://arxiv.org/abs/2205.01972</li>
+</ul>
+<h2 id="specialized-architectures">Specialized Architectures<a class="headerlink" href="#specialized-architectures" title="Permanent link">&para;</a></h2>
+<h3 id="multi-scale-pyramids">Multi-Scale &amp; Pyramids<a class="headerlink" href="#multi-scale-pyramids" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>PVT-V2</strong> - Improved Pyramid Vision Transformer - https://arxiv.org/abs/2106.13797</li>
+<li><strong>PiT</strong> - Pooling-based Vision Transformer - https://arxiv.org/abs/2103.16302</li>
+<li><strong>MViT-V2</strong> - Improved Multiscale Vision Transformer - https://arxiv.org/abs/2112.01526</li>
+<li><strong>NesT</strong> - Aggregating Nested Transformers - https://arxiv.org/abs/2105.12723</li>
+<li><strong>TNT</strong> - Transformer-iN-Transformer - https://arxiv.org/abs/2103.00112</li>
+</ul>
+<h3 id="eva-models">EVA Models<a class="headerlink" href="#eva-models" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>EVA</strong> - https://arxiv.org/abs/2211.07636</li>
+<li><strong>EVA-02</strong> - https://arxiv.org/abs/2303.11331</li>
+</ul>
+<h3 id="davit-hiera">DaViT &amp; Hiera<a class="headerlink" href="#davit-hiera" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>DaViT</strong> - Dual Attention Vision Transformers</li>
+<li><strong>Hiera</strong> - Hierarchical vision transformer from Meta - https://github.com/facebookresearch/hiera</li>
+</ul>
+<h2 id="classic-legacy-architectures">Classic &amp; Legacy Architectures<a class="headerlink" href="#classic-legacy-architectures" title="Permanent link">&para;</a></h2>
+<p>Time-tested architectures still widely used.</p>
+<h3 id="dense-efficient">Dense &amp; Efficient<a class="headerlink" href="#dense-efficient" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>DenseNet</strong> - https://arxiv.org/abs/1608.06993</li>
+<li><strong>DPN</strong> - Dual-Path Network - https://arxiv.org/abs/1707.01629</li>
+<li><strong>GPU-Efficient Networks</strong> - https://arxiv.org/abs/2006.14090</li>
+</ul>
+<h3 id="inception-family">Inception Family<a class="headerlink" href="#inception-family" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Inception-V3</strong> - https://arxiv.org/abs/1512.00567</li>
+<li><strong>Inception-ResNet-V2 / Inception-V4</strong> - https://arxiv.org/abs/1602.07261</li>
+<li><strong>Xception</strong> - https://arxiv.org/abs/1610.02357</li>
+<li><strong>Xception (Modified Aligned)</strong> - https://arxiv.org/abs/1802.02611</li>
+</ul>
+<h3 id="detection-backbones">Detection Backbones<a class="headerlink" href="#detection-backbones" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>DLA</strong> - Deep Layer Aggregation - https://arxiv.org/abs/1707.06484</li>
+<li><strong>HRNet</strong> - High-Resolution Net - https://arxiv.org/abs/1908.07919</li>
+<li><strong>CSPNet</strong> - Cross-Stage Partial Networks - https://arxiv.org/abs/1911.11929</li>
+<li><strong>TResNet</strong> - https://arxiv.org/abs/2003.13630</li>
+<li><strong>VovNet V2 and V1</strong> - https://arxiv.org/abs/1911.06667</li>
+</ul>
+<h3 id="specialized">Specialized<a class="headerlink" href="#specialized" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>SelecSLS</strong> - https://arxiv.org/abs/1907.00837</li>
+<li><strong>ReXNet</strong> - https://arxiv.org/abs/2007.00992</li>
+<li><strong>ResMLP</strong> - https://arxiv.org/abs/2105.03404</li>
+<li><strong>RepVGG</strong> - https://arxiv.org/abs/2101.03697</li>
+<li><strong>SqueezeNet</strong> - Lightweight architecture</li>
+<li><strong>VGG</strong> - https://arxiv.org/abs/1409.1556</li>
+</ul>
+<h3 id="nas-models">NAS Models<a class="headerlink" href="#nas-models" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>NASNet-A</strong> - https://arxiv.org/abs/1707.07012</li>
+<li><strong>PNasNet</strong> - https://arxiv.org/abs/1712.00559</li>
+<li><strong>EfficientNet (AutoML)</strong> - https://arxiv.org/abs/1905.11946</li>
+</ul>
+<h3 id="normalizer-free">Normalizer-Free<a class="headerlink" href="#normalizer-free" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>NFNet-F</strong> - https://arxiv.org/abs/2102.06171</li>
+<li><strong>NF-RegNet / NF-ResNet</strong> - https://arxiv.org/abs/2101.08692</li>
+</ul>
+<h3 id="other-notable">Other Notable<a class="headerlink" href="#other-notable" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>RegNet</strong> - https://arxiv.org/abs/2003.13678</li>
+<li><strong>RegNetZ</strong> - https://arxiv.org/abs/2103.06877</li>
+<li><strong>VOLO</strong> - Vision Outlooker - https://arxiv.org/abs/2106.13112</li>
+<li><strong>XCiT</strong> - Cross-Covariance Image Transformers - https://arxiv.org/abs/2106.09681</li>
+<li><strong>Visformer</strong> - https://arxiv.org/abs/2104.12533</li>
+<li><strong>HGNet / HGNet-V2</strong> - From PaddlePaddle</li>
+</ul>
+<h2 id="architecture-categories">Architecture Categories<a class="headerlink" href="#architecture-categories" title="Permanent link">&para;</a></h2>
+<h3 id="by-paradigm">By Paradigm<a class="headerlink" href="#by-paradigm" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Pure Transformers</strong>: ViT, DeiT, BEiT</li>
+<li><strong>Hierarchical Transformers</strong>: Swin, PVT, Twins</li>
+<li><strong>Hybrid</strong>: CoAtNet, LeViT, MobileViT</li>
+<li><strong>Pure ConvNets</strong>: ResNet, EfficientNet, ConvNeXt</li>
+<li><strong>MLP-Based</strong>: MLP-Mixer, ResMLP, gMLP</li>
+<li><strong>Meta-Architectures</strong>: MetaFormer, PoolFormer</li>
+</ol>
+<h3 id="by-use-case">By Use Case<a class="headerlink" href="#by-use-case" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Mobile/Edge</strong>: MobileNet series, GhostNet, RepViT</li>
+<li><strong>Server/Cloud</strong>: Large ViT, EVA, Swin-Large</li>
+<li><strong>Balanced</strong>: EfficientNet, ResNet-50, ViT-Base</li>
+<li><strong>Research</strong>: Experimental architectures, NAS models</li>
+</ul>
+<h3 id="by-training-type">By Training Type<a class="headerlink" href="#by-training-type" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Supervised</strong>: Standard ImageNet training</li>
+<li><strong>Self-Supervised</strong>: BEiT, DINO variants</li>
+<li><strong>Weakly-Supervised</strong>: WSL ResNets</li>
+<li><strong>Distillation</strong>: DeiT models</li>
+<li><strong>CLIP-style</strong>: SigLIP, MobileCLIP</li>
+</ul>
+<h2 id="architecture-selection-guide">Architecture Selection Guide<a class="headerlink" href="#architecture-selection-guide" title="Permanent link">&para;</a></h2>
+<p>Choose based on your constraints:</p>
+<ul>
+<li><strong>Accuracy Priority</strong>: Large ViT, EVA, Swin-Large</li>
+<li><strong>Speed Priority</strong>: MobileNet-V4, EfficientNet-B0, FastViT</li>
+<li><strong>Memory Priority</strong>: Tiny models, MobileNet variants</li>
+<li><strong>Balanced</strong>: ResNet-50D, EfficientNet-B1-B3, ViT-Base</li>
+<li><strong>Novel Features</strong>: NaFlexViT (variable aspect), ROPE-ViT (rotary embeddings)</li>
+</ul>
+<h2 id="links">Links<a class="headerlink" href="#links" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../metrics/overview/">Model Metrics</a></li>
+<li><a href="../getting-started/">Getting Started</a></li>
+<li><a href="https://github.com/GeorgePearse/pytorch-image-models">GitHub Repository</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2019-2025 Ross Wightman
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/GeorgePearse/pytorch-image-models" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://pypi.org/project/timm/" target="_blank" rel="noopener" title="pypi.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 444.7a20.4 20.4 0 1 1 0-40.7 20.4 20.4 0 1 1 0 40.7M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.6-183.4a20.4 20.4 0 1 1 0 40.8 20.4 20.4 0 1 1 0-40.8"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
