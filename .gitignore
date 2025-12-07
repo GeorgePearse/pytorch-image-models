@@ -119,3 +119,5 @@ Testing notebook.ipynb
 /*.png
 /*.zip
 /*.tar.*
+# MkDocs build output
+site/
